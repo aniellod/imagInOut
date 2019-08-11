@@ -1,6 +1,6 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2019-08-11T10:03:08
+# Project created by QtCreator 2018-11-05T19:08:08
 #
 #-------------------------------------------------
 
@@ -10,6 +10,8 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = imagInOut
 TEMPLATE = app
+LIBS+=-lSDL2 -lSDL2_image -lSDL2_gfx
+QT += multimedia multimediawidgets
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which has been marked as deprecated (the exact warnings
@@ -26,15 +28,35 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
-        mainwindow.cpp
+        mainwindow.cpp \
+        message.cpp \
+        preferences.cpp
 
 HEADERS += \
-        mainwindow.h
+        mainwindow.h \
+        globals.h \
+        message.h \
+        preferences.h
 
 FORMS += \
-        mainwindow.ui
+        mainwindow.ui \
+        message.ui \
+        preferences.ui
+
+unix:!macx {
+LIBS += -L /usr/lib/x86_64-linux-gnu/ -lSDL2 -ljsoncpp -lSDL2main -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_gfx -lSDL2_ttf -lboost_system
+INCLUDEPATH += /usr/include/SDL2 /usr/include
+}
+
+macx: {
+LIBS += -L /usr/lib/ -L/opt/local/lib -L/usr/local/lib -F/Library/Frameworks -framework SDL2 -ljsoncpp -framework SDL2_image -framework SDL2_mixer -framework SDL2_ttf  -lboost_system
+INCLUDEPATH += /opt/local/include
+CONFIG += app_bundle  # to remove, do CONFIG -= app_bundle
+}
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+
